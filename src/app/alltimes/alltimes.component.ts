@@ -14,8 +14,11 @@ const MAX_EXAMPLE_RECORDS = 1000;
   styleUrls: ['./alltimes.component.css']
 })
 export class AlltimesComponent implements OnInit {
+  onEditComplete(editInfo) { }
+  onRowSelect(editInfo) { }
 
-  @ViewChild("dt") dt : DataTable;
+
+  @ViewChild("dt") dt: DataTable;
 
   allTimesheetData = [];
 
@@ -33,7 +36,7 @@ export class AlltimesComponent implements OnInit {
 
   contextMenu: MenuItem[];
 
-  recordCount : number;
+  recordCount: number;
 
   display: boolean = false;
 
@@ -59,12 +62,12 @@ export class AlltimesComponent implements OnInit {
           endTime
         }
     }`;
-    
+
 
     const queryObservable = this.apollo.watchQuery({
 
       query: AllClientsQuery,
-      pollInterval:200
+      pollInterval: 200
 
     }).subscribe(({ data, loading }: any) => {
 
@@ -75,37 +78,37 @@ export class AlltimesComponent implements OnInit {
 
   }
   onSaveComplete() {
-        const user = this.addEntryForm.value.User;
-        const project = this.addEntryForm.value.Project;
-        const category = this.addEntryForm.value.Category;
-        const startTime = this.addEntryForm.value.StartTime;
-        const endTime = this.addEntryForm.value.EndTime;
-    
-        const createTimesheet = gql`
+    const user = this.addEntryForm.value.User;
+    const project = this.addEntryForm.value.Project;
+    const category = this.addEntryForm.value.Category;
+    const startTime = this.addEntryForm.value.StartTime;
+    const endTime = this.addEntryForm.value.EndTime;
+
+    const createTimesheet = gql`
           mutation createTimesheet ($user: String!, $project: String!, $category: String!, $startTime: Int!, $endTime: Int!, $date: DateTime!) {
             createTimesheet(user: $user, project: $project, category: $category, startTime: $startTime, endTime: $endTime, date: $date ) {
               id
             }
           }
         `;
-    
-        this.apollo.mutate({
-          mutation: createTimesheet,
-          variables: {
-            user: user,
-            project: project,
-            category: category,
-            startTime: startTime,
-            endTime: endTime,
-            date: new Date()
-          }
-        }).subscribe(({ data }) => {
-          console.log('got data', data);
-          
-        }, (error) => {
-          console.log('there was an error sending the query', error);
-        });
-        this.displayEntryForm = false;
+
+    this.apollo.mutate({
+      mutation: createTimesheet,
+      variables: {
+        user: user,
+        project: project,
+        category: category,
+        startTime: startTime,
+        endTime: endTime,
+        date: new Date()
       }
+    }).subscribe(({ data }) => {
+      console.log('got data', data);
+
+    }, (error) => {
+      console.log('there was an error sending the query', error);
+    });
+    this.displayEntryForm = false;
+  }
 
 }
