@@ -1,5 +1,7 @@
 {
   "projects": {
-    "agile-times": "agile-times-68e68"
+    "agile-times": "agile-times-68e68",
+    "default": "agile-times-mutation",
+    "mutation": "agile-times-mutation-f703d"
   }
 }
